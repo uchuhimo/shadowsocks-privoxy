@@ -1,23 +1,20 @@
-FROM alpine:latest
-MAINTAINER bluebu <bluebuwang@gmail.com>
+FROM ubuntu:16.04
 
 #------------------------------------------------------------------------------
 # Environment variables:
 #------------------------------------------------------------------------------
 
-RUN \
-  apk --update --upgrade add \
-      py-pip \
-      privoxy \
-  && rm /var/cache/apk/*
+RUN apt update \
+  && apt install software-properties-common -y \
+  && add-apt-repository ppa:max-c-lv/shadowsocks-libev -y \
+  && apt update \
+  && apt install -y shadowsocks-libev privoxy
 
-RUN pip install shadowsocks
-
-ENV SERVER_ADDR= \
-    SERVER_PORT=8899  \
-    METHOD=aes-256-cfb \
+ENV SERVER_ADDR=127.0.0.1 \
+    SERVER_PORT=1080  \
+    METHOD=chacha20-ietf-poly1305 \
     TIMEOUT=300 \
-    PASSWORD=
+    PASSWORD=xxx
 
 #------------------------------------------------------------------------------
 # Populate root file system:
